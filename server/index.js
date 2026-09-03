@@ -4,6 +4,9 @@ import express from 'express';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { logger } from './middlewares/logger.js';
 
+import swaggerUi from 'swagger-ui-express';
+import { openapiSpec } from './docs/openapi.js';
+
 import categoriesRouter from './routes/categories.js';
 import objetsRouter from './routes/objets.js';
 import depotsRouter from './routes/depots.js';
@@ -13,21 +16,22 @@ import statsRouter from './routes/stats.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get('/api/ping', (req, res) => {
-    res.status(200).json({message:'pong'});
-});
-
 app.use(express.json());
 app.use(logger);
+
+app.get('/api/ping', (req, res) => {
+  res.status(200).json({ message: 'pong' });
+});
 
 app.use('/api/categories', categoriesRouter);
 app.use('/api/objets', objetsRouter);
 app.use('/api/depots', depotsRouter);
 app.use('/api/personnes', personnesRouter);
 app.use('/api/stats', statsRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`Serveur démarré sur http://localhost:${PORT}`);
+  console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
