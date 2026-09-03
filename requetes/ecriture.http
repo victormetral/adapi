@@ -81,3 +81,36 @@ Content-Type: application/json
   "etat_arrivee": "bon_etat",
   "categorie_id": 3
 }
+
+### Faire évoluer un statut, sans prix
+PATCH {{baseUrl}}/objets/12/statut
+Content-Type: application/json
+
+{
+  "statut": "en_reparation"
+}
+
+### Faire évoluer un statut, avec prix
+PATCH {{baseUrl}}/objets/13/statut
+Content-Type: application/json
+
+{
+  "statut": "en_rayon",
+  "prix": 25.50
+}
+
+### ERREUR — statut invalide (400 attendu)
+PATCH {{baseUrl}}/objets/12/statut
+Content-Type: application/json
+
+{
+  "statut": "perdu"
+}
+
+### ERREUR — objet inexistant (404 attendu)
+PATCH {{baseUrl}}/objets/9999/statut
+Content-Type: application/json
+
+{
+  "statut": "recycle"
+}

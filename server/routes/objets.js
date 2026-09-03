@@ -18,6 +18,33 @@ router.get('/', async (req, res) => {
   res.status(200).json(rows);
 });
 
+const STATUTS_VALIDES = ['arrive', 'en_reparation', 'en_rayon', 'vendu', 'recycle'];
+
+router.patch('/:id/statut', async (req, res) => {
+  const { statut, prix } = req.body;
+
+  if (!statut) {
+    return res.status(400).json({ erreur: 'statut est obligatoire' });
+  }
+
+  if (!STATUTS_VALIDES.includes(statut)) {
+    return res.status(400).json({ erreur: `statut doit être l'un de : ${STATUTS_VALIDES.join(', ')}` });
+  }
+
+  const { rows } = await pool.query(`
+    UPDATE objet
+    SET statut = $1::statut_objet, prix = COALESCE($2, prix)
+    WHERE id = $3
+    RETURNING *
+  `, [statut, prix ?? null, req.params.id]);
+
+  if (rows.length === 0) {
+    return res.status(404).json({ erreur: 'Objet introuvable' });
+  }
+
+  res.status(200).json(rows[0]);
+});
+
 router.get('/:id', async (req, res) => {
   const { rows } = await pool.query(`
     SELECT o.id, o.libelle, o.poids_kg, o.etat_arrivee, o.statut, o.prix,
