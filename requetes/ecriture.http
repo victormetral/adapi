@@ -1,0 +1,83 @@
+@baseUrl = http://localhost:3000/api
+
+### Créer une personne
+POST {{baseUrl}}/personnes
+Content-Type: application/json
+
+{
+  "nom": "Curie",
+  "prenom": "Marie",
+  "telephone": "0600000000",
+  "adherente": true
+}
+
+### ERREUR — corps incomplet (400 attendu)
+POST {{baseUrl}}/personnes
+Content-Type: application/json
+
+{
+  "telephone": "0600000000"
+}
+
+### Créer un dépôt
+POST {{baseUrl}}/depots
+Content-Type: application/json
+
+{
+  "personne_id": 1,
+  "date_depot": "2026-09-01",
+  "type": "boutique"
+}
+
+### ERREUR — personne_id inexistant (400 attendu)
+POST {{baseUrl}}/depots
+Content-Type: application/json
+
+{
+  "personne_id": 9999,
+  "date_depot": "2026-09-01",
+  "type": "boutique"
+}
+
+### ERREUR — type invalide (400 attendu)
+POST {{baseUrl}}/depots
+Content-Type: application/json
+
+{
+  "personne_id": 1,
+  "date_depot": "2026-09-01",
+  "type": "camion"
+}
+
+### Ajouter un objet à un dépôt
+POST {{baseUrl}}/depots/1/objets
+Content-Type: application/json
+
+{
+  "libelle": "Théière vintage",
+  "poids_kg": 1.2,
+  "etat_arrivee": "bon_etat",
+  "categorie_id": 3
+}
+
+### ERREUR — poids_kg envoyé en chaîne (400 attendu)
+POST {{baseUrl}}/depots/1/objets
+Content-Type: application/json
+
+{
+  "libelle": "Théière vintage",
+  "poids_kg": "1.2",
+  "etat_arrivee": "bon_etat",
+  "categorie_id": 3
+}
+
+### ERREUR — dépôt inexistant (404 attendu)
+POST {{baseUrl}}/depots/9999/objets
+Content-Type: application/json
+
+{
+  "libelle": "Théière vintage",
+  "poids_kg": 1.2,
+  "etat_arrivee": "bon_etat",
+  "categorie_id": 3
+}

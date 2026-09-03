@@ -28,6 +28,41 @@ router.post('/', async (req, res) => {
   res.status(201).json(rows[0]);
 });
 
+router.post('/:id/objets', async (req, res) => {
+  const { libelle, poids_kg, etat_arrivee, categorie_id } = req.body;
+  const depot_id = req.params.id;
+
+  if (!libelle || poids_kg === undefined || !etat_arrivee || !categorie_id) {
+    return res.status(400).json({ erreur: 'libelle, poids_kg, etat_arrivee et categorie_id sont obligatoires' });
+  }
+
+  if (typeof poids_kg !== 'number') {
+    return res.status(400).json({ erreur: 'poids_kg doit être un nombre' });
+  }
+
+  if (!['bon_etat', 'a_reparer', 'hors_service'].includes(etat_arrivee)) {
+    return res.status(400).json({ erreur: 'etat_arrivee invalide' });
+  }
+
+  const depot = await pool.query('SELECT id FROM depot WHERE id = $1', [depot_id]);
+  if (depot.rows.length === 0) {
+    return res.status(404).json({ erreur: 'Dépôt introuvable' });
+  }
+
+  const categorie = await pool.query('SELECT id FROM categorie WHERE id = $1', [categorie_id]);
+  if (categorie.rows.length === 0) {
+    return res.status(400).json({ erreur: 'categorie_id inconnu' });
+  }
+
+  const { rows } = await pool.query(`
+    INSERT INTO objet (libelle, poids_kg, etat_arrivee, categorie_id, depot_id)
+    VALUES ($1, $2, $3::etat_objet, $4, $5)
+    RETURNING *
+  `, [libelle, poids_kg, etat_arrivee, categorie_id, depot_id]);
+
+  res.status(201).json(rows[0]);
+});
+
 router.get('/:id', async (req, res) => {
   const depotResult = await pool.query(`
     SELECT d.id, d.date_depot, d.type,
