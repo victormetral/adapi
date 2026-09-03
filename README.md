@@ -92,4 +92,8 @@ Ouvrir le fichier dans VS Code, cliquer sur **Send Request** au-dessus de chaque
 
 ## Bonus
 
-*(à venir si le temps le permet)*
+## Bonus
+
+- **Documentation interactive** : Swagger UI sur `/api-docs`, décrivant les 10 routes (paramètres, corps attendu, codes de réponse).
+- **Middleware d'erreurs centralisé** : toute exception non gérée renvoie un JSON `{ erreur: ... }` avec un statut 500, jamais une stack trace brute.
+- **Middleware de log** : chaque requête affiche sa méthode, son URL, son code de statut et sa durée dans le terminal.
