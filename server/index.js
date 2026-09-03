@@ -5,6 +5,7 @@ import categoriesRouter from './routes/categories.js';
 import objetsRouter from './routes/objets.js';
 import depotsRouter from './routes/depots.js';
 import personnesRouter from './routes/personnes.js';
+import statsRouter from './routes/stats.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +19,7 @@ app.use('/api/categories', categoriesRouter);
 app.use('/api/objets', objetsRouter);
 app.use('/api/depots', depotsRouter);
 app.use('/api/personnes', personnesRouter);
+app.use('/api/stats', statsRouter);
 
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur http://localhost:${PORT}`);

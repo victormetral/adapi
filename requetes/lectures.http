@@ -29,3 +29,6 @@ GET {{baseUrl}}/depots/1
 
 ### ERREUR — dépôt inexistant (404 attendu)
 GET {{baseUrl}}/depots/9999
+
+### Statistiques globales
+GET {{baseUrl}}/stats
