@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
+
 import { errorHandler } from './middlewares/errorHandler.js';
+import { logger } from './middlewares/logger.js';
 
 import categoriesRouter from './routes/categories.js';
 import objetsRouter from './routes/objets.js';
@@ -16,6 +18,7 @@ app.get('/api/ping', (req, res) => {
 });
 
 app.use(express.json());
+app.use(logger);
 
 app.use('/api/categories', categoriesRouter);
 app.use('/api/objets', objetsRouter);
