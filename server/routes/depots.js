@@ -3,6 +3,31 @@ import pool from '../db.js';
 
 const router = Router();
 
+router.post('/', async (req, res) => {
+  const { personne_id, date_depot, type } = req.body;
+
+  if (!personne_id || !date_depot || !type) {
+    return res.status(400).json({ erreur: 'personne_id, date_depot et type sont obligatoires' });
+  }
+
+  if (!['boutique', 'domicile'].includes(type)) {
+    return res.status(400).json({ erreur: 'type doit être boutique ou domicile' });
+  }
+
+  const personne = await pool.query('SELECT id FROM personne WHERE id = $1', [personne_id]);
+  if (personne.rows.length === 0) {
+    return res.status(400).json({ erreur: 'personne_id inconnu' });
+  }
+
+  const { rows } = await pool.query(`
+    INSERT INTO depot (date_depot, type, personne_id)
+    VALUES ($1, $2::type_depot, $3)
+    RETURNING *
+  `, [date_depot, type, personne_id]);
+
+  res.status(201).json(rows[0]);
+});
+
 router.get('/:id', async (req, res) => {
   const depotResult = await pool.query(`
     SELECT d.id, d.date_depot, d.type,
