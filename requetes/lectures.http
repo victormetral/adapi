@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:3000/api
+
+### Health check
+GET {{baseUrl}}/ping
+
+### Toutes les catégories
+GET {{baseUrl}}/categories
+
+### Tous les objets
+GET {{baseUrl}}/objets
+
+### Objets filtrés par statut
+GET {{baseUrl}}/objets?statut=en_rayon
+
+### Objets filtrés par catégorie
+GET {{baseUrl}}/objets?categorie_id=1
+
+### Filtres cumulés
+GET {{baseUrl}}/objets?statut=en_rayon&categorie_id=1
+
+### Un objet précis
+GET {{baseUrl}}/objets/3
+
+### ERREUR — objet inexistant (404 attendu)
+GET {{baseUrl}}/objets/9999
+
+### Un dépôt avec sa donatrice et ses objets
+GET {{baseUrl}}/depots/1
+
+### ERREUR — dépôt inexistant (404 attendu)
+GET {{baseUrl}}/depots/9999
