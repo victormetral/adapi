@@ -18,4 +18,24 @@ router.get('/', async (req, res) => {
   res.status(200).json(rows);
 });
 
+router.get('/:id', async (req, res) => {
+  const { rows } = await pool.query(`
+    SELECT o.id, o.libelle, o.poids_kg, o.etat_arrivee, o.statut, o.prix,
+           c.libelle AS categorie,
+           d.id AS depot_id, d.date_depot, d.type AS type_depot,
+           p.nom AS donatrice_nom, p.prenom AS donatrice_prenom
+    FROM objet o
+    JOIN categorie c ON c.id = o.categorie_id
+    JOIN depot     d ON d.id = o.depot_id
+    JOIN personne  p ON p.id = d.personne_id
+    WHERE o.id = $1
+  `, [req.params.id]);
+
+  if (rows.length === 0) {
+    return res.status(404).json({ erreur: 'Objet introuvable' });
+  }
+
+  res.status(200).json(rows[0]);
+});
+
 export default router; 
