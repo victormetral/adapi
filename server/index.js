@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 import categoriesRouter from './routes/categories.js';
 import objetsRouter from './routes/objets.js';
@@ -15,11 +16,14 @@ app.get('/api/ping', (req, res) => {
 });
 
 app.use(express.json());
+
 app.use('/api/categories', categoriesRouter);
 app.use('/api/objets', objetsRouter);
 app.use('/api/depots', depotsRouter);
 app.use('/api/personnes', personnesRouter);
 app.use('/api/stats', statsRouter);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur http://localhost:${PORT}`);
