@@ -77,7 +77,7 @@ Le serveur écoute sur `http://localhost:3000`.
 
 Les requêtes de test sont dans `requetes/`, au format `.http` (extension **REST Client** de VS Code) :
 
-- `requetes/lecture.http` — les 5 routes de lecture, dont 2 cas d'erreur (404)
+- `requetes/lectures.http` — les 5 routes de lecture, dont 2 cas d'erreur (404)
 - `requetes/ecriture.http` — les 5 routes d'écriture, dont plusieurs cas d'erreur (400/404)
 
 Ouvrir le fichier dans VS Code, cliquer sur **Send Request** au-dessus de chaque bloc, serveur lancé.
